@@ -93,6 +93,11 @@ class CategoriesController extends Controller
     /**
      * Remove the specified resource from storage.
      */
+    public function delete($id){
+        $data = Categories::find($id);
+        $data->delete();
+        return redirect()->route("categories");
+    }
     public function destroy(Categories $categories)
     {
         //

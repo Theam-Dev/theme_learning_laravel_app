@@ -63,6 +63,12 @@
                                     <a class="dropdown-item" href="{{ route('categories') }}">
                                         Categories
                                     </a>
+                                    <a class="dropdown-item" href="{{ route('slide') }}">
+                                        Slides
+                                    </a>
+                                    <a class="dropdown-item" href="{{ route('product') }}">
+                                        Product
+                                    </a>
                                 </div>
                             </li>
                             <li class="nav-item dropdown">
@@ -96,6 +102,8 @@
 
         </main>
     </div>
+    <script src="{{ asset('theme/tinymce/tinymce.min.js')}}"></script>
+@yield("scripts")
 </body>
 
 </html>

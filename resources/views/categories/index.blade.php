@@ -23,12 +23,10 @@
                     </td>
                     <td>
                         <a href="{{route('categories-edit',$item->id)}}" class="btn btn-info btn-sm">Edit</a>
-                        <a href="#" class="btn btn-danger btn-sm">Delete</a>
+                        <a href="{{route('categories-delete',$item->id)}}" class="btn btn-danger btn-sm">Delete</a>
                     </td>
                 </tr>
             @endforeach
-
-
         </tbody>
     </table>
     {{ $data->links() }}
