@@ -14,9 +14,9 @@ class ProductsController extends Controller
      */
     public function index()
     {
-        $data = Products::with("categories")->get();
+        $data = Products::with("categories","gallery")->get();
         //return response()->json($data);
-        return view('products.index', compact('data'));
+       return view('products.index', compact('data'));
     }
 
     /**
@@ -37,7 +37,8 @@ class ProductsController extends Controller
             "title" => "required",
             "description" => "required",
             "price" => "required",
-            "images" => "required"
+            "images" => "required",
+            "imagesgallery" => "required"
         ]);
         $data = new Products();
         $data->categoryid = $request->categoryid;
@@ -46,7 +47,16 @@ class ProductsController extends Controller
         $data->images = $request->images->store('images');
         $data->description = $request->description;
         $data->save();
-        return redirect()->route('products');
+
+        $id = $data->id;
+        $galleries = $request->file('imagesgallery');
+        foreach($galleries as $image){
+            $gall = new ProductGallary();
+            $gall->product_id = $id;
+            $gall->image_gallary = $image->store('images');
+            $gall->save();
+        }
+        return redirect()->route('product');
     }
 
     /**
@@ -60,24 +70,64 @@ class ProductsController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Products $products)
+    public function edit($id)
     {
-        //
+        $categories = Categories::all();
+        $data = Products::find($id);
+        $arr = array(
+            "categories" => $categories,
+            "data" => $data
+        );
+        return view('products.edit', $arr);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Products $products)
+    public function update($id,Request $request)
     {
-        //
+        $request->validate([
+            "title" => "required",
+            "description" => "required",
+            "price" => "required"
+        ]);
+        $data = Products::find($id);
+        $data->categoryid = $request->categoryid;
+        $data->title = $request->title;
+        $data->prices = $request->price;
+        $data->description = $request->description;
+
+        if($request->hasFile('images')){
+            $file = $request->file('images')->store("images");
+        }else{
+            $file = $data->images;
+        }
+        $data->images = $file;
+        $data->save();
+        $galleries = $request->file('imagesgallery');
+        if($galleries){
+            $gg = ProductGallary::where('product_id', $id)->get();
+            foreach ($gg as $record) {
+                $record->delete();
+            }
+            foreach($galleries as $image){
+                $gall = new ProductGallary();
+                $gall->product_id = $id;
+                $gall->image_gallary = $image->store('images');
+                $gall->save();
+            }
+        }
+        return redirect()->route('product');
+
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Products $products)
+    public function destroy($id)
     {
-        //
+        $data = Products::find($id);
+        $data->delete();
+        return redirect()->route('product');
     }
 }

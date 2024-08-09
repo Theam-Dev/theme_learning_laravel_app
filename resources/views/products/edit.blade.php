@@ -1,6 +1,7 @@
 @extends("layouts/app")
 @section("content")
-    <form action="{{route('product-store')}}" enctype="multipart/form-data" method="post">
+    <form action="{{route('product-update',$data->id)}}" enctype="multipart/form-data" method="post">
+        @method("PUT")
         @csrf
         <div class="row">
             <div class="col-md-4">
@@ -8,13 +9,14 @@
                     <label>Categories</label>
                     <select class="form-select" name="categoryid">
                         @foreach($categories as $item)
-                            <option value="{{$item->id}}">{{$item->title}}</option>
+                            <option value="{{$item->id}}" {{ $data->categoryid == $item->id ? "selected" : ''}} >{{$item->title}}</option>
                         @endforeach
                     </select>
+
                 </div>
                 <div class="form-group mb-2">
                     <label>Title</label>
-                    <input type="text" name="title" class="form-control" value="{{old("title")}}"/>
+                    <input type="text" name="title" class="form-control" value="{{$data->title}}"/>
                     @if($errors->has('title'))
                         <span class='text-danger'>
                {{ $errors->first('title') }}
@@ -23,7 +25,7 @@
                 </div>
                 <div class="form-group mb-2">
                     <label>Price</label>
-                    <input type="number" name="price" class="form-control" value="{{old("price")}}"/>
+                    <input type="number" name="price" class="form-control" value="{{$data->prices}}"/>
                     @if($errors->has('price'))
                         <span class='text-danger'>
                {{ $errors->first('price') }}
@@ -54,7 +56,7 @@
             <div class="col-md-8">
                 <div class="form-group mb-2">
                     <label>Description</label>
-                    <textarea id="description" name="description"></textarea>
+                    <textarea id="description" name="description">{{$data->description}}</textarea>
                     @if($errors->has('description'))
                         <span class='text-danger'>
                {{ $errors->first('description') }}

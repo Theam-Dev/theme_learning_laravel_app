@@ -12,7 +12,6 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
 Route::controller(CategoriesController::class)->prefix('categories')->group(function () {
     Route::get('/index', 'index')->name("categories");
     Route::get('/create', 'create')->name("categories-create");
@@ -20,7 +19,6 @@ Route::controller(CategoriesController::class)->prefix('categories')->group(func
     Route::post('/store', 'store')->name("categories-store");
     Route::put('/update/{id}', 'update')->name("categories-update");
     Route::get('/delete/{id}', 'delete')->name("categories-delete");
-
 });
 
 Route::controller(SlideController::class)->prefix('sides')->group(function () {
@@ -33,6 +31,7 @@ Route::controller(SlideController::class)->prefix('sides')->group(function () {
 Route::controller(ProductsController::class)->prefix('product')->group(function () {
     Route::get('/index', 'index')->name("product");
     Route::get('/create', 'create')->name("product-create");
+    Route::get('/edit/{id}', 'edit')->name("product-edit");
     Route::post('/store', 'store')->name("product-store");
     Route::put('/update/{id}', 'update')->name("product-update");
     Route::get('/delete/{id}', 'destroy')->name("product-delete");

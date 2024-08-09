@@ -15,20 +15,42 @@
         </thead>
         <tbody>
         @foreach ($data as $item)
-            <tr>
+            <tr >
                 <td>{{ $item->id }}</td>
                 <td>{{ $item->categories->title }}</td>
-                <td>{{ $item->title }}</td>
+                <td onclick="showGallery({{$item->id}})" style="color: #0dcaf0; cursor: pointer;">{{ $item->title }}</td>
                 <td>
-                    <img src="{{ url('storage/' . $item->images) }}" width="80" />
+                    <img src="{{$item->isImage }}" width="80" />
                 </td>
                 <td>{{ $item->price }}</td>
                 <td>
-                    <a href="{{route('categories-edit',$item->id)}}" class="btn btn-info btn-sm">Edit</a>
-                    <a href="{{route('categories-delete',$item->id)}}" class="btn btn-danger btn-sm">Delete</a>
+                    <button class="btn btn-primary btn-sm" onclick="showGallery({{$item->id}})">Gallery</button>
+                    <a href="{{route('product-edit',$item->id)}}" class="btn btn-info btn-sm">Edit</a>
+                    <a href="{{route('product-delete',$item->id)}}" class="btn btn-danger btn-sm">Delete</a>
                 </td>
             </tr>
+            @foreach($item->gallery as $gall)
+                <tr class="gallery{{$gall->product_id}}" style="display: none;">
+                    <td></td>
+                    <td></td>
+                    <td ></td>
+                    <td>
+                        <img src="{{ $gall->gallarylink }}" width="80" />
+                    </td>
+                    <td></td>
+                    <td>
+                    </td>
+                </tr>
+            @endforeach
+
         @endforeach
         </tbody>
     </table>
+@endsection
+@section("scripts")
+    <script type="text/javascript">
+            function showGallery(id){
+                $(".gallery"+id).toggle();
+            }
+    </script>
 @endsection
